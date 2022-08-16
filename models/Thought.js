@@ -19,10 +19,10 @@ const thoughtSchema = new Schema(
     },
     reactions: [
         //array of nested documents created with reactionSchema
-        // {
-        //   type: Schema.Types.ObjectId,
-        //   ref: 'Student',
-        // },
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'reaction',
+        },
       ], 
     },
     {
@@ -33,5 +33,6 @@ const thoughtSchema = new Schema(
         // id: false,
       }
 );
+const Thought = model('thought', thoughtSchema);
 
 module.exports = thoughtSchema;

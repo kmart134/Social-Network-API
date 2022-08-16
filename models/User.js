@@ -1,4 +1,4 @@
-const { Schema } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema(
   {
@@ -15,16 +15,17 @@ const userSchema = new Schema(
         //must match a valid email address
     },
     thoughts: [
-        // {
-        //   type: Schema.Types.ObjectId,
-        //   ref: 'Student',
-        // },
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'thought',
+        },
       ],
     friends: [
-        // {
-        //   type: Schema.Types.ObjectId,
-        //   ref: 'Student',
-        // },
+      //is this correct?
+        {
+          type: Schema.Types.ObjectId,
+          ref: 'user',
+        },
       ], 
   },
   {
@@ -34,5 +35,8 @@ const userSchema = new Schema(
     // id: false,
   }
   );
+
+  //initialize User Model
+  const User = model('user', userSchema);
 
   module.exports = userSchema;
