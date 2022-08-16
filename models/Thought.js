@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-const userSchema = new Schema(
+const thoughtSchema = new Schema(
   {
     thoughtText: {
       type: String,
@@ -9,8 +9,8 @@ const userSchema = new Schema(
       maxLength: 280
     },
     createdAt: {
-        //date
-        //current timestamp
+        type: Date,
+        default: Date.now,
         //getter method to format timestamp
     },
     username: {
@@ -24,4 +24,14 @@ const userSchema = new Schema(
         //   ref: 'Student',
         // },
       ], 
-})
+    },
+    {
+        //Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.
+        // toJSON: {
+        //   virtuals: true,
+        // },
+        // id: false,
+      }
+);
+
+module.exports = thoughtSchema;

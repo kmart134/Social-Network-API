@@ -34,3 +34,5 @@ const userSchema = new Schema(
     // id: false,
   }
   );
+
+  module.exports = userSchema;
