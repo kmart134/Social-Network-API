@@ -43,9 +43,41 @@ createUser(req, res) {
 //update a user
     //User.findOneAndDelete
     //$addToSet - to add the new friend to the user's friend list
+addAssignment(req, res) {
+    console.log('You are adding an assignment');
+    console.log(req.body);
+    Student.findOneAndUpdate(
+        { _id: req.params.studentId },
+        { $addToSet: { assignments: req.body } },
+        { runValidators: true, new: true }
+    )
+        .then((student) =>
+        !student
+            ? res
+                .status(404)
+                .json({ message: 'No student found with that ID :(' })
+            : res.json(student)
+        )
+        .catch((err) => res.status(500).json(err));
+},
+
+
 
 //remove friend from friend list
     //user.findOneAndUpdate
+removeFriend(req, res) {
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: { userId: req.params.userId } } },
+        { runValidators: true, new: true }
+        )
+        .then((user) =>
+        !user
+          ? res.status(404).json({ message: 'No user with that ID' })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+    },
 
 };
 //export userController
