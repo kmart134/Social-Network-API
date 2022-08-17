@@ -4,7 +4,6 @@ const { User , Thought } = require('../models');
 //set up controllers
 const userController = {
 //get all users
-    //activity 13 in server.js- reference
 getAllUsers (req, res) {
     User.find()
     .select('-__v')
@@ -12,6 +11,7 @@ getAllUsers (req, res) {
     .catch((err) => {res.status(500).json(err)});    
 },
 
+//find single user by id
 //what works  dbUserDta or user????
 findSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
@@ -42,29 +42,50 @@ createUser(req, res) {
 
 //update a user
     //User.findOneAndDelete
-    //$addToSet - to add the new friend to the user's friend list
-addAssignment(req, res) {
-    console.log('You are adding an assignment');
-    console.log(req.body);
-    Student.findOneAndUpdate(
-        { _id: req.params.studentId },
-        { $addToSet: { assignments: req.body } },
+    //$set - set the req.body
+updateUser(req, res) {
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $set: req.body },
         { runValidators: true, new: true }
     )
-        .then((student) =>
-        !student
+        .then((user) =>
+        !user
+            ? res.status(404).json({ message: 'No user with this id!' })
+            : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err));
+    },
+
+    //should there be a DeteleUser here?
+
+    //add friend to friend list
+    //User.findOneAndUpdate
+    //$addToSet - add the new frind to user's friend list
+addFriend(req, res) {
+    console.log('You are adding an friend');
+    console.log(req.body);
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.body } },
+        { runValidators: true, new: true }
+    )
+        .then((user) =>
+        !user
             ? res
                 .status(404)
-                .json({ message: 'No student found with that ID :(' })
-            : res.json(student)
+                .json({ message: 'No friend found with that ID :(' })
+            : res.json(user)
         )
         .catch((err) => res.status(500).json(err));
 },
 
 
 
+
 //remove friend from friend list
-    //user.findOneAndUpdate
+    //user.findOneAndDelete
+    //LOOK AT THE ONE AGAIN
 removeFriend(req, res) {
     User.findOneAndUpdate(
         { _id: req.params.userId },
