@@ -58,7 +58,15 @@ updateUser(req, res) {
     },
 
     //should there be a DeteleUser here?
-
+deleteUser(req, res) {
+    User.findOneAndDelete({ _id: req.params.userId })
+        .then((user) =>
+        !user
+            ? res.status(404).json({ message: 'No user with that ID' })
+            : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err));
+    },
     //add friend to friend list
     //User.findOneAndUpdate
     //$addToSet - add the new frind to user's friend list
