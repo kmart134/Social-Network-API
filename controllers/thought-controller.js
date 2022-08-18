@@ -28,9 +28,33 @@ getSingleThought(req, res) {
 
 //create a thought
     //Thought.create
+createThought(req, res) {
+    Thought.create(req.body)
+        .then((thought) => {
+        res.json(thought);
+        })
+        .catch((err) => {
+         console.log(err);
+        res.status(500).json(err);
+        });
+    },
 
 //update a thought
     //Thought.findOneAndUpdate
+updateThought(req, res) {
+    Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $set: req.body },
+        { runValidators: true, new: true }
+    )
+        .then((thought) =>
+        !thought
+            ? res.status(404).json({ message: 'No thought with this id!' })
+            : res.json(thought)
+        )
+        .catch((err) => res.status(500).json(err));
+    },
+    
 
 //delete a thought - also need to do a findOneAndUpdate on the user to remove the thoughtfrom the user's thoughts array
     //Thought.findOneandRemove
