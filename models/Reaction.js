@@ -1,5 +1,7 @@
-const { Schema } = require('mongoose');
+const { Schema, Types } = require('mongoose');
+const { ObjectId } = require('mongoose').Types;
 const dateFormat = require('../utils/dateFormat');
+// ObjectId() method for converting studentId string into an ObjectId for querying database
 
 const reactionSchema = new Schema(
   {

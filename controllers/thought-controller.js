@@ -111,27 +111,17 @@ addReaction(req, res) {
     //use$pull to pull reaction from thoughtsreaction array
 
 removeReaction(req, res) {
-    Thought.findOneAndRemove({ reactionId: req.params.reactionId })
+    Thought.findOneAndUpdate(
+        {thoughts: req.params.thoughtId},
+        { $pull:{ reactions: { reactionId: req.params.reactionId } } },
+        { runValidators: true, new: true },
+    )
         .then((thought) =>
         !thought
             ? res.status(404).json({ message: 'No such reaction exists' })
-            : Thought.findOneAndUpdate(
-                {thoughts: req.params.thoughtId},
-                { $pull: { reactionId: req.params.reactionId } },
-                { new: true }
+            : res.json(thought)
             )
-        )
-        .then((user) =>
-        !user
-            ? res.status(404).json({
-                 message: 'Thought deleted, but no user found',
-            })
-            : res.json({ message: 'Thought successfully deleted' })
-        )
-        .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-        });
+        .catch((err) => res.status(500).json(err));
     },
 
 };

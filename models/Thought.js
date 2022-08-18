@@ -1,4 +1,5 @@
 const { Schema, model} = require('mongoose');
+const reactionSchema = require('./Reaction');
 const dateFormat = require('../utils/dateFormat');
 
 const thoughtSchema = new Schema(
@@ -19,14 +20,7 @@ const thoughtSchema = new Schema(
         type: String,
         required: true,
     },
-    reactions: [
-        //array of nested documents created with reactionSchema
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'reaction',
-          //shouldthis say thought?
-        },
-      ], 
+    reactions: [reactionSchema], 
     },
     {
         //Create a virtual called reactionCount that retrieves the length of the thought's reactions array field on query.

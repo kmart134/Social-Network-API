@@ -71,11 +71,10 @@ deleteUser(req, res) {
     //User.findOneAndUpdate
     //$addToSet - add the new frind to user's friend list
 addFriend(req, res) {
-    console.log('You are adding an friend');
-    console.log(req.body);
+    console.log('You are adding a friend');
     User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $addToSet: { friends: req.body } },
+        { $addToSet: { friends: req.params.friendId } },
         { runValidators: true, new: true }
     )
         .then((user) =>
