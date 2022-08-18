@@ -57,7 +57,7 @@ updateUser(req, res) {
         .catch((err) => res.status(500).json(err));
     },
 
-    //should there be a DeteleUser here?
+    //should there be a DeteleUser here? is it a bonus
 deleteUser(req, res) {
     User.findOneAndDelete({ _id: req.params.userId })
         .then((user) =>
