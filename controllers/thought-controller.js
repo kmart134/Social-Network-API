@@ -87,11 +87,52 @@ deleteThought(req, res) {
 //add a reaction to athought
     //Thought.findOneandUpdate
     //$addToSet
+addReaction(req, res) {
+    console.log('You are adding a reaction!');
+    console.log(req.body);
+     Thought.findOneAndUpdate(
+        { _id: req.params.thoughtId },
+        { $addToSet: { reactions: req.body } },
+        { runValidators: true, new: true }
+    )
+        .then((thought) =>
+        !thought
+            ? res
+                .status(404)
+                .json({ message: 'No thought found with that ID :(' })
+            : res.json(thought)
+        )
+        .catch((err) => res.status(500).json(err));
+    },
 
 
 //remove reaction from a thought
     //thought.findOneAndUpdate
     //use$pull to pull reaction from thoughtsreaction array
+
+removeReaction(req, res) {
+    Thought.findOneAndRemove({ reactionId: req.params.reactionId })
+        .then((thought) =>
+        !thought
+            ? res.status(404).json({ message: 'No such reaction exists' })
+            : Thought.findOneAndUpdate(
+                {thoughts: req.params.thoughtId},
+                { $pull: { reactionId: req.params.reactionId } },
+                { new: true }
+            )
+        )
+        .then((user) =>
+        !user
+            ? res.status(404).json({
+                 message: 'Thought deleted, but no user found',
+            })
+            : res.json({ message: 'Thought successfully deleted' })
+        )
+        .catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+        });
+    },
 
 };
 //export thoughtController
